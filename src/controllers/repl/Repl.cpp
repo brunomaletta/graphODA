@@ -400,6 +400,16 @@ void diameter() {
 	}
 }
 
+void matching() {
+	Graph G = getGraph();
+	auto match = G.blossom();
+	int ans = 0;
+	for (auto i : match) if (i > -1) ans++;
+	cout << "Maximum matching has cardinality " << ans/2 << endl;
+	for (int i = 0; i < G.getN(); i++) if (match[i] != -1 and match[i] > i)
+		cout << G.label[i] << " " << G.label[match[i]] << endl;
+}
+
 void run(int X, int Y) {
 	cout << "GraphODA" << endl;
 
@@ -529,6 +539,8 @@ void run(int X, int Y) {
 					center();
 				else if (com == "diameter")
 					diameter();
+				else if (com == "matching")
+					matching();
 				else
 					throw REPLInvalidCommandException();
 			}

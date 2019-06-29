@@ -473,3 +473,75 @@ vector<pair<int, int>> GraphGen::bridges() {
 
 // TODO
 vector<int> GraphGen::coloring() { return vector<int>(); }
+
+void GraphGen::contractBlossom(vector<int> &match, vector<int> &pai, vector<int> &base, vector<int> &vis, queue<int> &q, int u, int v, bool first) {
+	static vector<bool> bloss;
+	static int l;
+	if (first) {
+		bloss = vector<bool>(n, 0);
+		vector<bool> teve(n, 0);
+		int k = u; l = v;
+		while (1) {
+			teve[k = base[k]] = 1;
+			if (match[k] == -1) break;
+			k = pai[match[k]];
+		}
+		while (!teve[l = base[l]]) l = pai[match[l]];
+	}
+	while (base[u] != l) {
+		bloss[base[u]] = bloss[base[match[u]]] = 1;
+		pai[u] = v;
+		v = match[u];
+		u = pai[match[u]];
+	}
+	if (!first) return;
+	contractBlossom(match, pai, base, vis, q, v, u, 0);
+	for (int i = 0; i < n; i++) if (bloss[base[i]]) {
+		base[i] = l;
+		if (!vis[i]) q.push(i);
+		vis[i] = 1;
+	}
+}
+
+int GraphGen::getAugmentingPath(vector<int> &match, vector<int> &pai, vector<int> &base, vector<int> &vis, queue<int> &q, int s) {
+    for (int i = 0; i < n; i++) base[i] = i, pai[i] = -1, vis[i] = 0;
+    vis[s] = 1; q = queue<int>(); q.push(s);
+    while (q.size()) {
+        int u = q.front(); q.pop();
+        for (auto j : simAdj[u]) {
+			int i = j.first;
+            if (base[i] == base[u] or match[u] == i) continue;
+            if (i == s or (match[i] != -1 and pai[match[i]] != -1))
+                contractBlossom(match, pai, base, vis, q, u, i);
+            else if (pai[i] == -1) {
+                pai[i] = u;
+                if (match[i] == -1) return i;
+                i = match[i];
+                vis[i] = 1; q.push(i);
+            }
+        }
+    }
+    return -1;
+}
+
+vector<int> GraphGen::blossom() {
+	vector<int> match(n, -1), pai(n), base(n), vis(n);
+	queue<int> q;
+	for (int i = 0; i < n; i++) if (match[i] == -1)
+		for (auto j : simAdj[i]) if (match[j.first] == -1) {
+			match[i] = j.first;
+			match[j.first] = i;
+			break;
+		}
+	for (int i = 0; i < n; i++) if (match[i] == -1) {
+		int j = getAugmentingPath(match, pai, base, vis, q, i);
+		if (j == -1) continue;
+		while (j != -1) {
+			int p = pai[j], pp = match[p];
+			match[p] = j;
+			match[j] = p;
+			j = pp;
+		}
+	}
+	return match;
+}

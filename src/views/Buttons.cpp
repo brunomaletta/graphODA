@@ -44,6 +44,21 @@ void center(GraphCanvas *GC) {
 	GC->GD.color[T.center()] = 1;
 }
 
+void matching(GraphCanvas *GC) {
+	auto match = GC->GD.G.blossom();
+	for (int i = 0; i < GC->GD.G.getM(); i++) GC->GD.colorAresta[i] = 100;
+	map<pair<int, int>, int> id;
+	auto adj = GC->GD.G.getAdj();
+	int count = 0;
+	for (int i = 0; i < GC->GD.G.getN(); i++)
+		for (auto j : adj[i]) id[make_pair(i, j.first)] = count++;
+	for (int i = 0; i < GC->GD.G.getN(); i++) if (match[i] != -1 and match[i] > i) {
+		pair<int, int> j = make_pair(i, match[i]), jj = make_pair(match[i], i);
+		if (id.count(j)) GC->GD.colorAresta[id[j]] = 1;
+		if (id.count(jj)) GC->GD.colorAresta[id[jj]] = 1;
+	}
+}
+
 void clearGraph(GraphCanvas *GC) {
 	GC->GD.color = vector<int>(GC->GD.G.getN(), 0);
 	GC->GD.colorAresta = vector<int>(GC->GD.G.getM(), 100);
@@ -53,7 +68,7 @@ void clearGraph(GraphCanvas *GC) {
 
 namespace buttons {
 void general(tgui::Gui &gui, vector<tgui::Button::Ptr> &v) {
-	vector<int> op = {1, 2, 3, 4, 6};
+	vector<int> op = {1, 2, 3, 4, 6, 7};
 	for (int i : op) gui.add(v[i]);
 }
 
@@ -117,6 +132,12 @@ void init(vector<tgui::Button::Ptr> &v, GraphCanvas &GC) {
 	clear->setSize(75.f, 20.f);
 	clear->setPosition(810.f, 360.f);
 	clear->connect("pressed", functions::clearGraph, &GC);
+
+	auto matching = tgui::Button::create("matching");
+	v.push_back(matching);
+	matching->setSize(75.f, 20.f);
+	matching->setPosition(810.f, 30.f);
+	matching->connect("pressed", functions::matching, &GC);
 }
 
 void update(tgui::Gui &gui, vector<tgui::Button::Ptr> &botoes,

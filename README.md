@@ -147,4 +147,10 @@ Computa o centro da árvore *var*.
 ```
 >>> var > diameter
 ```
-computa o diâmetro da árvore *var*.
+Computa o diâmetro da árvore *var*.
+
+#### matching
+```
+>>> var > matching
+```
+Computa o matching máximo do grafo.

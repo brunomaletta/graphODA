@@ -176,6 +176,13 @@ class GraphGen {
 	/// @return Lista com as arestas que são pontes no grafo.
 	vector<pair<int, int>> bridges();
 
+	/// Algoritmo Blossom para matching máximo em grafos gerais.
+	///
+	/// Complexidade: O(n^3)
+	/// @return Vetor indicando, para cada vértice, com quem ele está emparelhado
+	/// no matching máximo, ou -1 se não estiver emparelhado.
+	vector<int> blossom();
+
   protected:
 	///
 	/// Número de vértices do grafo.
@@ -263,6 +270,10 @@ class GraphGen {
 	///
 	/// Complexidade: O(n*m)
 	long long bellmanFord(int, int);
+
+	void contractBlossom(vector<int>&, vector<int>&, vector<int>&, vector<int>&, queue<int>&, int, int, bool = true);
+
+	int getAugmentingPath(vector<int>&, vector<int>&, vector<int>&, vector<int>&, queue<int>&, int);
 };
 
 ///
