@@ -13,6 +13,7 @@
 using namespace std;
 
 namespace interface {
+
 Graph display(int, int, Graph = Graph());
 }
 

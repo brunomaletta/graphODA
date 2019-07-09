@@ -136,6 +136,20 @@ void bipartiteCast() {
 		return;
 	}
 	Graph G = getGraphVar(var2);
+	string file;
+	if (!(ss >> file)) throw REPLInvalidCommandException();
+	Graph j;
+	try {
+		j = lerGrafoArquivo(file);
+	} catch (FileNotFoundException &e) {
+		fileNotFoundError(file);
+		undoDeclaration();
+		return;
+	}
+	if (j.getN()) {
+		graphs[at].G = j;
+		graphs[at].type = 0;
+	}
 	if (!G.isBipartite()) {
 		graphIsNotError(var2, 1);
 		undoDeclaration();
@@ -404,10 +418,28 @@ void matching() {
 	Graph G = getGraph();
 	auto match = G.blossom();
 	int ans = 0;
-	for (auto i : match) if (i > -1) ans++;
-	cout << "Maximum matching has cardinality " << ans/2 << endl;
-	for (int i = 0; i < G.getN(); i++) if (match[i] != -1 and match[i] > i)
-		cout << G.label[i] << " " << G.label[match[i]] << endl;
+	for (auto i : match)
+		if (i > -1) ans++;
+	cout << "Maximum matching has cardinality " << ans / 2 << endl;
+	for (int i = 0; i < G.getN(); i++)
+		if (match[i] != -1 and match[i] > i)
+			cout << G.label[i] << " " << G.label[match[i]] << endl;
+}
+
+void tikz(int X, int Y) {
+	string file;
+	ss >> file;
+	if (file == "") throw REPLInvalidCommandException();
+	Graph G = getGraph();
+	double scale;
+	if (!(ss >> scale)) scale = 1;
+	try {
+		GraphDisplay GD(G, X * 4 / 5, Y * 6 / 7);
+		GD.good(max(10, 100 - GD.G.getN()), max(10, 100 - GD.G.getM()));
+		GD.getTikz(file, scale);
+	} catch (FileNotFoundException &e) {
+		fileNotFoundError(file);
+	}
 }
 
 void run(int X, int Y) {
@@ -541,6 +573,8 @@ void run(int X, int Y) {
 					diameter();
 				else if (com == "matching")
 					matching();
+				else if (com == "tikz")
+					tikz(X, Y);
 				else
 					throw REPLInvalidCommandException();
 			}

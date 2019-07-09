@@ -32,7 +32,7 @@ void pontes(GraphCanvas *GC) {
 	for (int i = 0; i < GC->GD.G.getN(); i++)
 		for (auto j : adj[i]) id[make_pair(i, j.first)] = count++;
 	for (auto i : pont) {
-		GC->GD.colorAresta[id[i]] = 1;
+		if (id.count(i)) GC->GD.colorAresta[id[i]] = 1;
 		pair<int, int> j = make_pair(i.second, i.first);
 		if (id.count(j)) GC->GD.colorAresta[id[j]] = 1;
 	}
@@ -52,11 +52,13 @@ void matching(GraphCanvas *GC) {
 	int count = 0;
 	for (int i = 0; i < GC->GD.G.getN(); i++)
 		for (auto j : adj[i]) id[make_pair(i, j.first)] = count++;
-	for (int i = 0; i < GC->GD.G.getN(); i++) if (match[i] != -1 and match[i] > i) {
-		pair<int, int> j = make_pair(i, match[i]), jj = make_pair(match[i], i);
-		if (id.count(j)) GC->GD.colorAresta[id[j]] = 1;
-		if (id.count(jj)) GC->GD.colorAresta[id[jj]] = 1;
-	}
+	for (int i = 0; i < GC->GD.G.getN(); i++)
+		if (match[i] != -1 and match[i] > i) {
+			pair<int, int> j = make_pair(i, match[i]),
+						   jj = make_pair(match[i], i);
+			if (id.count(j)) GC->GD.colorAresta[id[j]] = 1;
+			if (id.count(jj)) GC->GD.colorAresta[id[jj]] = 1;
+		}
 }
 
 void clearGraph(GraphCanvas *GC) {

@@ -7,6 +7,7 @@ tgui::Gui gui;
 GraphCanvas GC;
 sf::Font fonte;
 bool mudou;
+bool para;
 
 void lerGrafoArquivoAux(tgui::EditBox::Ptr arq) {
 	Graph i;
@@ -61,6 +62,68 @@ void Save2File() {
 	gui.add(jan);
 }
 
+void tikzVai3(tgui::ChildWindow::Ptr jan, tgui::EditBox::Ptr arq,
+			  string *arquivo) {
+	gui.remove(jan);
+	janela.clear(sf::Color(251, 251, 251));
+	GC.display();
+	gui.draw();
+	janela.display();
+
+	cout << *arquivo;
+	GC.GD.getTikz(*arquivo, stod(arq->getText().toAnsiString()));
+	para = false;
+}
+
+void tikzVai2(tgui::ChildWindow::Ptr jan, tgui::EditBox::Ptr arq) {
+	gui.remove(jan);
+	janela.clear(sf::Color(251, 251, 251));
+	GC.display();
+	gui.draw();
+	janela.display();
+
+	static string arquivo = arq->getText().toAnsiString();
+
+	auto jan2 = tgui::ChildWindow::create("Escala");
+	jan2->setPosition(100.f, 100.f);
+	jan2->setSize(250.f, 50.f);
+	auto texto = tgui::EditBox::create();
+	texto->setDefaultText("Escala da imagem");
+	texto->setSize(200.f, 20.f);
+	texto->setPosition(10.f, 10.f);
+	jan2->add(texto);
+
+	// TODO: ERRO SE O TEXTO FOR VAZIO
+	auto botao = tgui::Button::create("Ok");
+	botao->setPosition(220.f, 10.f);
+	botao->setSize(20.f, 20.f);
+	botao->connect("pressed", tikzVai3, jan2, texto, &arquivo);
+	jan2->add(botao);
+
+	gui.add(jan2);
+}
+
+void tikzVai() {
+	para = true;
+	auto jan = tgui::ChildWindow::create("Tikz");
+	jan->setPosition(100.f, 100.f);
+	jan->setSize(250.f, 50.f);
+	auto texto = tgui::EditBox::create();
+	texto->setDefaultText("Nome do arquivo");
+	texto->setSize(200.f, 20.f);
+	texto->setPosition(10.f, 10.f);
+	jan->add(texto);
+
+	// TODO: ERRO SE O TEXTO FOR VAZIO
+	auto botao = tgui::Button::create("Ok");
+	botao->setPosition(220.f, 10.f);
+	botao->setSize(20.f, 20.f);
+	botao->connect("pressed", tikzVai2, jan, texto);
+	jan->add(botao);
+
+	gui.add(jan);
+}
+
 void Help() {
 	auto jan = tgui::ChildWindow::create("Ajuda");
 	jan->setPosition(100.f, 100.f);
@@ -68,7 +131,9 @@ void Help() {
 	auto texto = tgui::MessageBox::create("Texto");
 	texto->setPosition(0.f, 0.f);
 	texto->setSize(10.f, 10.f);
-	sf::String tipo("Para carregar um grafo, \nutilize o botao \"importar\"\n\nMais ajudas coming soon :p");
+	sf::String tipo(
+		"Para carregar um grafo, \nutilize o botao \"importar\"\n\nMais ajudas "
+		"coming soon :p");
 	texto->setText(tipo);
 
 	jan->add(texto);
@@ -79,7 +144,10 @@ void mudaDir() { (GC.GD.temDir) ^= 1; }
 
 void centraliza() { (GC.GD.centr) ^= 1; }
 
-void toggleDraw() { (GC.GD.draw ^= 1); }
+void toggleDraw() {
+	(GC.GD.draw ^= 1);
+	para = false;
+}
 
 void reseta() {
 	GC.setGraph(Graph());
@@ -141,6 +209,12 @@ void loadWidgets() {
 	reset->setPosition(700.f, 640.f);
 	gui.add(reset);
 
+	// botao tikz
+	auto tikz = tgui::Button::create("tikz");
+	tikz->setSize(75.f, 20.f);
+	tikz->setPosition(330.f, 640.f);
+	gui.add(tikz);
+
 	// Chama a função de importar arquivo
 	botaoArquivo->connect("pressed", lerGrafoArquivoAux, textoArquivo);
 	check->connect("checked", mudaDir);
@@ -153,6 +227,7 @@ void loadWidgets() {
 	botaoSave->connect("pressed", Save2File);
 	botaoCenter->connect("pressed", centraliza);
 	reset->connect("pressed", reseta);
+	tikz->connect("pressed", tikzVai);
 }
 
 void drawStuff() {
@@ -243,9 +318,10 @@ Graph display(int X, int Y, Graph G) {
 	tgui::Theme::setDefault(&tema);
 
 	// GraphCanvas
-	GC = GraphCanvas(janela, fonte, X * 4 / 5, Y * 6 / 7, 15);
+	GC = GraphCanvas(janela, fonte, X * 4 / 5, Y * 6 / 7);
 	GC.setGraph(G);
 	bool editing;
+	para = false;
 	tgui::EditBox::Ptr edit;
 
 	// Tenta importar os widgets da gui
@@ -420,7 +496,7 @@ Graph display(int X, int Y, Graph G) {
 					edit->setFocused(true);
 				}
 			}
-		} else if (GC.handleClique() or mudou) {
+		} else if (!para and (GC.handleClique() or mudou)) {
 			buttons::update(gui, botoes, GC);
 			mudou = false;
 		}

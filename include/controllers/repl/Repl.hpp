@@ -77,6 +77,8 @@ void bridges();
 void topoSort();
 void center();
 void diameter();
+void matching();
+void tikz(int, int);
 
 void run(int, int);
 } // namespace repl

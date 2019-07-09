@@ -154,3 +154,9 @@ Computa o diâmetro da árvore *var*.
 >>> var > matching
 ```
 Computa o matching máximo do grafo.
+
+#### tikz
+```
+>>> var > tikz file [scale]
+```
+Exporta o grafo em formato tikz para LaTeX no arquivo 'file'. O campo 'scale' é opcional, e altera a escala da imagem.

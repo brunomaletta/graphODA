@@ -506,3 +506,22 @@ void GraphDisplay::itera() {
 
 	fdpPeso(2);
 }
+
+void GraphDisplay::getTikz(string arq, double scale) {
+	ofstream outFile(arq);
+
+	for (int i = 0; i < G.getN(); i++)
+		outFile << "\\Vertex[x=" << scale * 5 * pos[i].x / X
+				<< ",y=" << scale * 5 * pos[i].y / X << "]{" << G.label[i]
+				<< "}\n";
+
+	outFile << "\n";
+	auto M = G.getMatrix();
+	for (int i = 0; i < G.getN(); i++)
+		for (int j = i + 1; j < G.getN(); j++)
+			if (M[i][j] or M[j][i])
+				outFile << "\\Edge(" << G.label[i] << ")(" << G.label[j]
+						<< ")\n";
+
+	outFile.close();
+}

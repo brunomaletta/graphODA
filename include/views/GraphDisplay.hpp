@@ -6,6 +6,8 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <fstream>
+#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -91,7 +93,7 @@ class GraphDisplay {
 	/// @param Grafo a ser representado.
 	/// @param X e Y que delimitam o canvas.
 	/// @param Raio do vértice.
-	GraphDisplay(Graph, int, int, int);
+	GraphDisplay(Graph, int, int, int = 15);
 
 	///
 	/// Seta um grafo no display.
@@ -197,6 +199,12 @@ class GraphDisplay {
 	///
 	/// Itera a animação do display.
 	void itera();
+
+	///
+	/// Gera código LaTeX (tikz) para o grafo.
+	/// @param Nome do arquivo onde salvar o código LaTeX.
+	/// @param Escala da imagem.
+	void getTikz(string, double);
 };
 
 #endif

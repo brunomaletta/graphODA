@@ -50,7 +50,7 @@ class GraphCanvas {
 	/// @param Fonte.
 	/// @param X e Y que delimitam o canvas.
 	/// @param raio do vértice.
-	GraphCanvas(sf::RenderWindow &, sf::Font &, int, int, int);
+	GraphCanvas(sf::RenderWindow &, sf::Font &, int, int, int = 15);
 
 	///
 	/// Define o grafo a ser representado.
