@@ -512,7 +512,7 @@ void GraphDisplay::getTikz(string arq, double scale) {
 
 	for (int i = 0; i < G.getN(); i++)
 		outFile << "\\Vertex[x=" << scale * 5 * pos[i].x / X
-				<< ",y=" << scale * 5 * pos[i].y / X << "]{" << G.label[i]
+				<< ",y=" << scale * 5 * (Y - pos[i].y) / X << "]{" << G.label[i]
 				<< "}\n";
 
 	outFile << "\n";

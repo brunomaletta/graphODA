@@ -70,7 +70,6 @@ void tikzVai3(tgui::ChildWindow::Ptr jan, tgui::EditBox::Ptr arq,
 	gui.draw();
 	janela.display();
 
-	cout << *arquivo;
 	GC.GD.getTikz(*arquivo, stod(arq->getText().toAnsiString()));
 	para = false;
 }
