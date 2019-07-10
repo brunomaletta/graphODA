@@ -346,6 +346,7 @@ bool GraphCanvas::handleClique() {
 					GD.addVertex(positionV);
 					mudou = true;
 					crieiVertice = 1;
+					dif = Vector(0, 0);
 				}
 			} else {
 				// trava vertice
