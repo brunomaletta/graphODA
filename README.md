@@ -1,6 +1,14 @@
 # 2019-1-grupo19
 [![Build Status](https://travis-ci.com/pds2-dcc-ufmg/2019-1-grupo19.svg?token=Mnxg5DUtyLmLApyc8NAT&branch=master)](https://travis-ci.com/pds2-dcc-ufmg/2019-1-grupo19)
 
+## Introdução
+
+Esse projeto é um software open source para visualização de grafos feito em C++. O REPL pode ser usado para analises rápidas de propriedades de um grafo.
+
+Para exemplos, assista ao [vídeo](https://www.youtube.com/watch?v=MY5hHPIj3cg).
+
+![](assets/example.gif)
+
 ## Dependências para compilação
 - CMake 2.6+
 - gcc & g++ 5.5+
@@ -30,6 +38,8 @@ make tests
 make docs
 # Executar
 make run
+# Executar o REPL
+make repl
 ```
 
 ## Gerando a documentação

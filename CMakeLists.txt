@@ -59,6 +59,12 @@ add_custom_target(run
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
 
+add_custom_target(repl
+	DEPENDS graphODA
+    COMMAND "${CMAKE_CURRENT_BINARY_DIR}/graphODA" "-r"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+
 # Gera toda a documentação do projeto
 add_custom_target(docs
 	DEPENDS tests
