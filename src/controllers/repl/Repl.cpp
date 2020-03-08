@@ -136,20 +136,6 @@ void bipartiteCast() {
 		return;
 	}
 	Graph G = getGraphVar(var2);
-	string file;
-	if (!(ss >> file)) throw REPLInvalidCommandException();
-	Graph j;
-	try {
-		j = lerGrafoArquivo(file);
-	} catch (FileNotFoundException &e) {
-		fileNotFoundError(file);
-		undoDeclaration();
-		return;
-	}
-	if (j.getN()) {
-		graphs[at].G = j;
-		graphs[at].type = 0;
-	}
 	if (!G.isBipartite()) {
 		graphIsNotError(var2, 1);
 		undoDeclaration();
