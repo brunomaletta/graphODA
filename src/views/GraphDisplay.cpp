@@ -510,18 +510,34 @@ void GraphDisplay::itera() {
 void GraphDisplay::getTikz(string arq, double scale) {
 	ofstream outFile(arq);
 
+	outFile << "\\begin{figure}[h!]\n";
+	outFile << "\t\\centering\n";
+	outFile << "\t\\scalebox{" << scale << "}{\n";
+	outFile << "\t\t\\begin{tikzpicture}\n";
+	outFile << "\t\t\t\\tikzstyle{every state}=[fill opacity=0.5,text opacity=1,semithick,minimum size=10pt]\n";
+	outFile << "\n";
+
 	for (int i = 0; i < G.getN(); i++)
-		outFile << "\\Vertex[x=" << scale * 5 * pos[i].x / X
-				<< ",y=" << scale * 5 * (Y - pos[i].y) / X << "]{" << G.label[i]
-				<< "}\n";
+		outFile << "\t\t\t\\node[state] (" << G.label[i] << ") at ("
+				<< 15 * pos[i].x / X << ", " << 15 * (Y - pos[i].y) / X
+				<< ") {" << G.label[i] << "};\n";
 
 	outFile << "\n";
+	outFile << "\t\t\t\\draw\n";
 	auto M = G.getMatrix();
 	for (int i = 0; i < G.getN(); i++)
-		for (int j = i + 1; j < G.getN(); j++)
-			if (M[i][j] or M[j][i])
-				outFile << "\\Edge(" << G.label[i] << ")(" << G.label[j]
-						<< ")\n";
+		for (int j = 0; j < G.getN(); j++) {
+			if (temDir and M[i][j])
+				outFile << "\t\t\t(" << G.label[i] << ") edge (" << G.label[j] << ")\n";
+			else if (!temDir and (M[i][j] or M[j][i]) and i < j)
+				outFile << "\t\t\t(" << G.label[i] << ") edge[-] (" << G.label[j] << ")\n";
+		}
+
+	outFile << "\t\t\t;\n";
+
+	outFile << "\t\t\\end{tikzpicture}\n";
+	outFile << "\t}\n";
+	outFile << "\\end{figure}\n";
 
 	outFile.close();
 }

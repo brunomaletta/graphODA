@@ -81,7 +81,9 @@ void tikzVai2(tgui::ChildWindow::Ptr jan, tgui::EditBox::Ptr arq) {
 	gui.draw();
 	janela.display();
 
-	static string arquivo = arq->getText().toAnsiString();
+	//static string arquivo = arq->getText().toAnsiString();
+	static string arquivo;
+	arquivo = arq->getText().toAnsiString();
 
 	auto jan2 = tgui::ChildWindow::create("Escala");
 	jan2->setPosition(100.f, 100.f);
