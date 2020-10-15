@@ -10,6 +10,8 @@
 #include <TGUI/TGUI.hpp>
 
 #include <string>
+#include <thread>
+#include <chrono>
 using namespace std;
 
 namespace interface {

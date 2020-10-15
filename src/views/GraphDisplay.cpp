@@ -524,14 +524,29 @@ void GraphDisplay::getTikz(string arq, double scale) {
 
 	outFile << "\n";
 	outFile << "\t\t\t\\draw\n";
-	auto M = G.getMatrix();
-	for (int i = 0; i < G.getN(); i++)
-		for (int j = 0; j < G.getN(); j++) {
-			if (temDir and M[i][j])
-				outFile << "\t\t\t(" << G.label[i] << ") edge (" << G.label[j] << ")\n";
-			else if (!temDir and (M[i][j] or M[j][i]) and i < j)
-				outFile << "\t\t\t(" << G.label[i] << ") edge[-] (" << G.label[j] << ")\n";
+
+	auto edg = G.getEdges();
+	auto pesos = G.getPesos();
+	for (int i = 0; i < G.getM(); i++) {
+		string peso, edgeOps;
+
+		if (G.isWeighted()) {
+			peso = " node{" + to_string(pesos[i]) + "}";
+			edgeOps = "pos=" + to_string(posPeso[i]);
 		}
+
+		if (!temDir) {
+			if (edgeOps.size()) edgeOps = "-," + edgeOps;
+			else edgeOps = "-";
+		}
+
+		string label1 = G.label[edg[i].first];
+		string label2 = G.label[edg[i].second];
+
+		outFile << "\t\t\t(" << label1 << ") edge";
+		if (edgeOps.size()) outFile << "[" << edgeOps << "]";
+		outFile << peso << " (" << label2 << ")\n";
+	}
 
 	outFile << "\t\t\t;\n";
 

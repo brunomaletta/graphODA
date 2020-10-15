@@ -342,6 +342,9 @@ Graph display(int X, int Y, Graph G) {
 	// Roda o programa enquanto a janela estiver aberta
 
 	while (janela.isOpen()) {
+		// dorme um pouco para nao usar muito processador
+		this_thread::sleep_for(chrono::milliseconds(1));
+
 		// se janela nao ta ativa, espera
 		if (!janela.hasFocus()) continue;
 
