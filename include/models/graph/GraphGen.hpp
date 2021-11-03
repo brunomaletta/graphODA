@@ -10,6 +10,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -183,6 +184,13 @@ class GraphGen {
 	/// emparelhado no matching máximo, ou -1 se não estiver emparelhado.
 	vector<int> blossom();
 
+	/// Algoritmo para encontrar os autovalores usando
+	/// Sylvester's law of inertia. Retorna os autovalores ordenados.
+	///
+	/// Complexidade: O(n^4 * log(1/EPS))
+	/// @Return Vetor com os autovalores ordenados.
+	vector<double> getEigenvalues();
+
   protected:
 	///
 	/// Número de vértices do grafo.
@@ -276,6 +284,12 @@ class GraphGen {
 
 	int getAugmentingPath(vector<int> &, vector<int> &, vector<int> &,
 						  vector<int> &, queue<int> &, int);
+
+	int cmpDouble(double, double, double=1e-6);
+
+	vector<int> inertia(vector<vector<double>>);
+
+	void eigenvalueRec(const vector<vector<int>>&, vector<double>&, double, double, int, int);
 };
 
 ///

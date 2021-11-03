@@ -558,3 +558,85 @@ vector<int> GraphGen::blossom() {
 		}
 	return match;
 }
+
+int GraphGen::cmpDouble(double x, double y, double EPS) {
+	double dist = abs(x-y);
+	if (dist < EPS) return 0;
+	return (x < y) ? -1 : 1;
+}
+
+vector<int> GraphGen::inertia(vector<vector<double>> a) {
+	int n = a.size();
+	for (int k = 0; k < n; k++) {
+		if (!cmpDouble(a[k][k], 0)) {
+			for (int i = k; i < n; i++) {
+				if (cmpDouble(a[i][k], 0)) {
+					vector<double> vec = a[i];
+
+					for (int j = 0; j < n; j++) {
+						a[k][j] += vec[j];
+						a[j][k] += vec[j];
+					}
+					break;
+				}
+			}
+		}
+		if (!cmpDouble(a[k][k], 0)) continue;
+		double alpha = sqrt(abs(a[k][k]));
+		for (int i = k; i < n; i++) {
+			a[i][k] /= alpha;
+			a[k][i] /= alpha;
+		}
+
+		for (int i = k+1; i < n; i++) {
+			double beta = a[i][k]/a[k][k];
+			for (int j = 0; j < n; j++) {
+				a[i][j] -= beta*a[k][j];
+			}
+			double gamma = a[k][i]/a[k][k];
+			for (int j = 0; j < n; j++) {
+				a[j][i] -= gamma*a[j][k];
+			}
+		}
+	}
+	vector<int> ans(3);
+	for (int k = 0; k < n; k++) {
+		ans[cmpDouble(a[k][k], 0, 1e-9) + 1]++;
+	}
+	return ans;
+}
+
+void GraphGen::eigenvalueRec(const vector<vector<int>>& t, vector<double>& eig,
+			double l, double r, int sz_l, int sz_r) {
+	if (sz_l + sz_r == t.size()) return;
+
+	double m = (l+r)/2;
+
+	if (!cmpDouble(l, r, 1e-6)) {
+		for (int k = 0; k < t.size()-sz_l-sz_r; k++)
+			eig.push_back(m);
+		return;
+	}
+
+	vector<vector<double>> a(t.size(), vector<double>(t.size()));
+	for (int i = 0; i < a.size(); i++) {
+		for (int j = 0; j < a.size(); j++) {
+			a[i][j] = t[i][j];
+			if (i == j) a[i][j] -= m;
+		}
+	}
+
+	auto i = inertia(a);
+
+	eigenvalueRec(t, eig, l, m, sz_l, i[1] + i[2]);
+
+	for (int k = 0; k < i[1]; k++) eig.push_back(m);
+
+	eigenvalueRec(t, eig, m, r, i[0] + i[1], sz_r);
+}
+
+vector<double> GraphGen::getEigenvalues() {
+	vector<double> ret;
+	eigenvalueRec(getSimMatrix(), ret, -getN(), getN(), 0, 0);
+	return ret;
+}

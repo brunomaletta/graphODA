@@ -8,6 +8,7 @@ GraphCanvas GC;
 sf::Font fonte;
 bool mudou;
 bool para;
+bool Espectro;
 
 void lerGrafoArquivoAux(tgui::EditBox::Ptr arq) {
 	Graph i;
@@ -143,6 +144,8 @@ void Help() {
 
 void mudaDir() { (GC.GD.temDir) ^= 1; }
 
+void mudaEspectro() { Espectro ^= 1; }
+
 void centraliza() { (GC.GD.centr) ^= 1; }
 
 void toggleDraw() {
@@ -172,6 +175,12 @@ void loadWidgets() {
 	check->setPosition(120.f, 640.f);
 	gui.add(check);
 
+	// Check box de se tem peso ou não
+	auto checkEspectro = tgui::CheckBox::create("Espectro");
+	checkEspectro->setSize(20.f, 20.f);
+	checkEspectro->setPosition(120.f, 665.f);
+	gui.add(checkEspectro);
+
 	// Check box de draw mode
 	auto checkDraw = tgui::CheckBox::create("Editar");
 	checkDraw->setSize(20.f, 20.f);
@@ -187,7 +196,7 @@ void loadWidgets() {
 	// botão de salvar
 	auto botaoSave = tgui::Button::create("Save");
 	botaoSave->setSize(75.f, 20.f);
-	botaoSave->setPosition(20.f, 660.f);
+	botaoSave->setPosition(20.f, 665.f);
 	gui.add(botaoSave);
 
 	// Botao pra ler arquivo
@@ -220,6 +229,9 @@ void loadWidgets() {
 	botaoArquivo->connect("pressed", lerGrafoArquivoAux, textoArquivo);
 	check->connect("checked", mudaDir);
 	check->connect("unchecked", mudaDir);
+
+	checkEspectro->connect("checked", mudaEspectro);
+	checkEspectro->connect("unchecked", mudaEspectro);
 
 	checkDraw->connect("checked", toggleDraw);
 	checkDraw->connect("unchecked", toggleDraw);
@@ -437,6 +449,36 @@ Graph display(int X, int Y, Graph G) {
 		tipo.setString(msg);
 
 		janela.draw(tipo);
+
+		if (Espectro) {
+			// Desenha matriz
+			auto& adj = GC.GD.simMatrix;
+			for (int i = 0; i < adj.size(); i++) {
+				string linha;
+				for (int j = 0; j < adj.size(); j++) {
+					if (j > 0) linha += ' ';
+					linha += adj[i][j] ? '1' : '0';
+				}
+				sf::Text sf_linha;
+				sf_linha.setFont(fonte);
+				sf_linha.setCharacterSize(18);
+				sf_linha.setFillColor(sf::Color(134, 194, 50));
+				sf_linha.setPosition(5, 20*i);
+				sf_linha.setString(linha);
+				janela.draw(sf_linha);
+			}
+
+			// Desenha matriz escalonada
+			for (int i = 0; i < adj.size(); i++) {
+				sf::Text eigenvalue;
+				eigenvalue.setFont(fonte);
+				eigenvalue.setCharacterSize(18);
+				eigenvalue.setFillColor(sf::Color(134, 194, 50));
+				eigenvalue.setPosition(20*GC.GD.G.getN() + 40, 20*i);
+				eigenvalue.setString(to_string(GC.GD.eigenvalues[i]));
+				janela.draw(eigenvalue);
+			}
+		}
 
 		/*
 		97,137,47 - verde escuro 61892F

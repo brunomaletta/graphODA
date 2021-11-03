@@ -16,6 +16,7 @@ string getType(int i) {
 	if (i == 2) return "Chordal";
 	if (i == 3) return "Dag";
 	if (i == 4) return "Tree";
+	return "";
 }
 
 Graph getGraphVar(string var2) {

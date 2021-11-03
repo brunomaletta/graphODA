@@ -84,6 +84,14 @@ class GraphDisplay {
 	vector<bool> isParal;
 
 	///
+	/// Matriz adjacencia simétrica
+	vector<vector<int>> simMatrix;
+
+	///
+	/// Autovalores
+	vector<double> eigenvalues;
+
+	///
 	/// Construtor de GraphDisplay vazio.
 	GraphDisplay() {}
 

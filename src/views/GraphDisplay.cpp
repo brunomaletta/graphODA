@@ -21,6 +21,9 @@ GraphDisplay::GraphDisplay(Graph G_, int X_, int Y_, int raio_) {
 	auto edg = G.getEdges();
 	for (int i = 0; i < G.getM(); i++)
 		if (adj[edg[i].second][edg[i].first]) isParal[i] = true;
+
+	simMatrix = G.getSimMatrix();
+	eigenvalues = G.getEigenvalues();
 }
 
 void GraphDisplay::setGraph(Graph &G) { *this = GraphDisplay(G, X, Y, raio); }
@@ -401,6 +404,9 @@ void GraphDisplay::addVertex(Vector v) {
 		for (auto j : adj[i]) G2.addEdge(i, j.first, j.second);
 	G = G2;
 	this->resetColors();
+
+	simMatrix = G.getSimMatrix();
+	eigenvalues = G.getEigenvalues();
 }
 
 // O(n+m)
@@ -431,6 +437,9 @@ void GraphDisplay::removeVertex(int v) {
 		}
 	G = G2;
 	this->resetColors();
+
+	simMatrix = G.getSimMatrix();
+	eigenvalues = G.getEigenvalues();
 }
 
 // O(n+m)
@@ -464,6 +473,9 @@ void GraphDisplay::addEdge(int a, int b) {
 				}
 		}
 	this->resetColors();
+
+	simMatrix = G.getSimMatrix();
+	eigenvalues = G.getEigenvalues();
 }
 
 // O(n+m)
@@ -493,6 +505,9 @@ void GraphDisplay::removeEdge(int e) {
 
 	G = G2;
 	this->resetColors();
+
+	simMatrix = G.getSimMatrix();
+	eigenvalues = G.getEigenvalues();
 }
 
 // O(n^2 + m^2)
