@@ -8,6 +8,8 @@ GraphCanvas GC;
 sf::Font fonte;
 bool mudou;
 bool para;
+tgui::EditBox::Ptr edit;
+bool editing;
 bool Espectro;
 
 void lerGrafoArquivoAux(tgui::EditBox::Ptr arq) {
@@ -146,11 +148,18 @@ void mudaDir() { (GC.GD.temDir) ^= 1; }
 
 void mudaEspectro() { Espectro ^= 1; }
 
+void mudaLabels() { GC.drawLabels ^= 1; }
+
 void centraliza() { (GC.GD.centr) ^= 1; }
 
 void toggleDraw() {
 	(GC.GD.draw ^= 1);
 	para = false;
+	if (editing) {
+		editing = 0;
+		gui.remove(edit);
+		GC.editLabel = GC.editWeight = -1;
+	}
 }
 
 void reseta() {
@@ -175,11 +184,18 @@ void loadWidgets() {
 	check->setPosition(120.f, 640.f);
 	gui.add(check);
 
-	// Check box de se tem peso ou não
+	// Check box do espectro
 	auto checkEspectro = tgui::CheckBox::create("Espectro");
 	checkEspectro->setSize(20.f, 20.f);
 	checkEspectro->setPosition(120.f, 665.f);
 	gui.add(checkEspectro);
+
+	// Check box dos labels
+	auto checkLabels = tgui::CheckBox::create("Labels");
+	checkLabels->setSize(20.f, 20.f);
+	checkLabels->setPosition(245.f, 665.f);
+	gui.add(checkLabels);
+	checkLabels->setChecked(true);
 
 	// Check box de draw mode
 	auto checkDraw = tgui::CheckBox::create("Editar");
@@ -232,6 +248,9 @@ void loadWidgets() {
 
 	checkEspectro->connect("checked", mudaEspectro);
 	checkEspectro->connect("unchecked", mudaEspectro);
+
+	checkLabels->connect("checked", mudaLabels);
+	checkLabels->connect("unchecked", mudaLabels);
 
 	checkDraw->connect("checked", toggleDraw);
 	checkDraw->connect("unchecked", toggleDraw);
@@ -333,9 +352,8 @@ Graph display(int X, int Y, Graph G) {
 	// GraphCanvas
 	GC = GraphCanvas(janela, fonte, X * 4 / 5, Y * 6 / 7);
 	GC.setGraph(G);
-	bool editing;
+	editing = false;
 	para = false;
-	tgui::EditBox::Ptr edit;
 
 	// Tenta importar os widgets da gui
 	try {

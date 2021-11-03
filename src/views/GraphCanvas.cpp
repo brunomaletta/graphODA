@@ -7,6 +7,7 @@ GraphCanvas::GraphCanvas(sf::RenderWindow &janela, sf::Font &fonte, int X,
 	this->GD = GraphDisplay(Graph(), X, Y, raio);
 	editLabel = -1;
 	editWeight = -1;
+	drawLabels = true;
 }
 
 int getIntSize(int n) {
@@ -155,20 +156,22 @@ void GraphCanvas::printGrafo() {
 		v.setPosition(GD.pos[i].x - GD.raio + 1, GD.pos[i].y - GD.raio + 1);
 		janela->draw(v);
 
-		// Coloca texto dentro da bola
-		sf::Text label;
-		label.setFont(fonte);
-		label.setString(GD.G.label[i]);
-		label.setCharacterSize(fontSize);
-		label.setFillColor(sf::Color::Black);
+		if (drawLabels) {
+			// Coloca texto dentro da bola
+			sf::Text label;
+			label.setFont(fonte);
+			label.setString(GD.G.label[i]);
+			label.setCharacterSize(fontSize);
+			label.setFillColor(sf::Color::Black);
 
-		// centraliza texto
-		sf::FloatRect box = label.getLocalBounds();
-		label.setOrigin(box.left + round(box.width / 2),
-						box.top + round(box.height / 2));
-		label.setPosition(GD.pos[i].x, GD.pos[i].y);
+			// centraliza texto
+			sf::FloatRect box = label.getLocalBounds();
+			label.setOrigin(box.left + round(box.width / 2),
+							box.top + round(box.height / 2));
+			label.setPosition(GD.pos[i].x, GD.pos[i].y);
 
-		if (i != editLabel) janela->draw(label);
+			if (i != editLabel) janela->draw(label);
+		}
 	}
 }
 

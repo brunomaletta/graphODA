@@ -41,6 +41,10 @@ class GraphCanvas {
 	int editWeight;
 
 	///
+	/// Se os labels devem ser desenhados ou não.
+	bool drawLabels;
+
+	///
 	/// Construtor vazio
 	GraphCanvas() {}
 
