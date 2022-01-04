@@ -1,5 +1,8 @@
-# 2019-1-grupo19
+# graphODA
 [![Build Status](https://travis-ci.com/pds2-dcc-ufmg/2019-1-grupo19.svg?token=Mnxg5DUtyLmLApyc8NAT&branch=master)](https://travis-ci.com/pds2-dcc-ufmg/2019-1-grupo19)
+![GitHub](https://img.shields.io/github/license/brunomaletta/graphODA)
+![GitHub top language](https://img.shields.io/github/languages/top/brunomaletta/graphODA)
+
 
 ## Introdução
 
