@@ -187,7 +187,7 @@ class GraphGen {
 	/// Algoritmo para encontrar os autovalores usando
 	/// Sylvester's law of inertia. Retorna os autovalores ordenados.
 	///
-	/// Complexidade: O(n^4 * log(1/EPS))
+	/// Complexidade: O(n^4 * log(n/EPS))
 	/// @Return Vetor com os autovalores ordenados.
 	vector<double> getEigenvalues();
 
