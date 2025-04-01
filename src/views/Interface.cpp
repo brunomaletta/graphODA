@@ -471,8 +471,10 @@ Graph display(int X, int Y, Graph G) {
 		janela.draw(tipo);
 
 		if (espectro) {
+			GC.GD.computeEigen();
+
 			// Desenha matriz
-			auto &adj = GC.GD.simMatrix;
+			auto adj = GC.GD.simMatrix;
 			for (int i = 0; i < adj.size(); i++) {
 				string linha;
 				for (int j = 0; j < adj.size(); j++) {
@@ -488,14 +490,15 @@ Graph display(int X, int Y, Graph G) {
 				janela.draw(sf_linha);
 			}
 
-			// Desenha matriz escalonada
+			// Desenha autovalores
+			auto eigen = GC.GD.eigenvalues;
 			for (int i = 0; i < adj.size(); i++) {
 				sf::Text eigenvalue;
 				eigenvalue.setFont(fonte);
 				eigenvalue.setCharacterSize(18);
 				eigenvalue.setFillColor(sf::Color(134, 194, 50));
 				eigenvalue.setPosition(20 * GC.GD.G.getN() + 40, 20 * i);
-				eigenvalue.setString(to_string(GC.GD.eigenvalues[i]));
+				eigenvalue.setString(to_string(eigen[i]));
 				janela.draw(eigenvalue);
 			}
 		}

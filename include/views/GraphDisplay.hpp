@@ -84,6 +84,10 @@ class GraphDisplay {
 	vector<bool> isParal;
 
 	///
+	/// Booleano que indica se a info de autovalores está atualizada.
+	bool eigenUpdated;
+
+	///
 	/// Matriz adjacencia simétrica
 	vector<vector<int>> simMatrix;
 
@@ -213,6 +217,9 @@ class GraphDisplay {
 	/// @param Nome do arquivo onde salvar o código LaTeX.
 	/// @param Escala da imagem.
 	void getTikz(string, double);
+
+	/// Computa autovalores.
+	void computeEigen();
 };
 
 #endif
