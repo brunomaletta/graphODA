@@ -11,6 +11,7 @@ bool para;
 tgui::EditBox::Ptr edit;
 bool editing;
 bool Espectro;
+tgui::CheckBox::Ptr editGraphButton;
 
 void lerGrafoArquivoAux(tgui::EditBox::Ptr arq) {
 	Graph i;
@@ -202,6 +203,7 @@ void loadWidgets() {
 	checkDraw->setSize(20.f, 20.f);
 	checkDraw->setPosition(700.f, 615.f);
 	gui.add(checkDraw);
+	editGraphButton = checkDraw;
 
 	// Botão de help
 	auto botaoHelp = tgui::Button::create("Help");
@@ -385,9 +387,11 @@ Graph display(int X, int Y, Graph G) {
 			// apertou alguma coisa no teclado
 			if (evento.type == sf::Event::KeyPressed) {
 				// ctrl -> toggle draw mode
-				if (0 and evento.key.code == sf::Keyboard::LControl and
-					!editing)
-					GC.GD.draw ^= 1;
+				if (evento.key.code == sf::Keyboard::LControl and !editing) {
+					if (GC.GD.draw) editGraphButton->setChecked(false);
+					else editGraphButton->setChecked(true);
+					break;
+				}
 
 				// esc -> sai da edicao dos pesos/labels
 				if (evento.key.code == sf::Keyboard::Escape) {
