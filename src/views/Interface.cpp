@@ -15,7 +15,7 @@ bool Espectro;
 void lerGrafoArquivoAux(tgui::EditBox::Ptr arq) {
 	Graph i;
 	try {
-		i = lerGrafoArquivo(arq->getText().toAnsiString());
+		i = lerGrafoArquivo(arq->getText().toStdString());
 	} catch (...) {
 		return;
 	}
@@ -42,7 +42,7 @@ void SaveScreen(tgui::ChildWindow::Ptr jan, tgui::EditBox::Ptr arq) {
 	t.create(800, 600);
 	t.loadFromImage(screenshot, r1);
 	sf::Image nova = t.copyToImage();
-	bool ok = nova.saveToFile(arq->getText().toAnsiString() + ".png");
+	bool ok = nova.saveToFile(arq->getText().toStdString() + ".png");
 }
 
 void Save2File() {
@@ -59,7 +59,7 @@ void Save2File() {
 	auto botao = tgui::Button::create("Ok");
 	botao->setPosition(220.f, 10.f);
 	botao->setSize(20.f, 20.f);
-	botao->connect("pressed", SaveScreen, jan, texto);
+	botao->onPress(SaveScreen, jan, texto);
 	jan->add(botao);
 
 	gui.add(jan);
@@ -73,7 +73,7 @@ void tikzVai3(tgui::ChildWindow::Ptr jan, tgui::EditBox::Ptr arq,
 	gui.draw();
 	janela.display();
 
-	GC.GD.getTikz(*arquivo, stod(arq->getText().toAnsiString()));
+	GC.GD.getTikz(*arquivo, stod(arq->getText().toStdString()));
 	para = false;
 }
 
@@ -84,9 +84,9 @@ void tikzVai2(tgui::ChildWindow::Ptr jan, tgui::EditBox::Ptr arq) {
 	gui.draw();
 	janela.display();
 
-	//static string arquivo = arq->getText().toAnsiString();
+	//static string arquivo = arq->getText().toStdString();
 	static string arquivo;
-	arquivo = arq->getText().toAnsiString();
+	arquivo = arq->getText().toStdString();
 
 	auto jan2 = tgui::ChildWindow::create("Escala");
 	jan2->setPosition(100.f, 100.f);
@@ -101,7 +101,7 @@ void tikzVai2(tgui::ChildWindow::Ptr jan, tgui::EditBox::Ptr arq) {
 	auto botao = tgui::Button::create("Ok");
 	botao->setPosition(220.f, 10.f);
 	botao->setSize(20.f, 20.f);
-	botao->connect("pressed", tikzVai3, jan2, texto, &arquivo);
+	botao->onPress(tikzVai3, jan2, texto, &arquivo);
 	jan2->add(botao);
 
 	gui.add(jan2);
@@ -122,7 +122,7 @@ void tikzVai() {
 	auto botao = tgui::Button::create("Ok");
 	botao->setPosition(220.f, 10.f);
 	botao->setSize(20.f, 20.f);
-	botao->connect("pressed", tikzVai2, jan, texto);
+	botao->onPress(tikzVai2, jan, texto);
 	jan->add(botao);
 
 	gui.add(jan);
@@ -135,7 +135,7 @@ void Help() {
 	auto texto = tgui::MessageBox::create("Texto");
 	texto->setPosition(0.f, 0.f);
 	texto->setSize(10.f, 10.f);
-	sf::String tipo(
+	std::string tipo(
 		"Para carregar um grafo, \nutilize o botao \"importar\"\n\nMais ajudas "
 		"coming soon :p");
 	texto->setText(tipo);
@@ -242,24 +242,20 @@ void loadWidgets() {
 	gui.add(tikz);
 
 	// Chama a função de importar arquivo
-	botaoArquivo->connect("pressed", lerGrafoArquivoAux, textoArquivo);
-	check->connect("checked", mudaDir);
-	check->connect("unchecked", mudaDir);
+	botaoArquivo->onPress(lerGrafoArquivoAux, textoArquivo);
+	check->onChange(mudaDir);
 
-	checkEspectro->connect("checked", mudaEspectro);
-	checkEspectro->connect("unchecked", mudaEspectro);
+	checkEspectro->onChange(mudaEspectro);
 
-	checkLabels->connect("checked", mudaLabels);
-	checkLabels->connect("unchecked", mudaLabels);
+	checkLabels->onChange(mudaLabels);
 
-	checkDraw->connect("checked", toggleDraw);
-	checkDraw->connect("unchecked", toggleDraw);
+	checkDraw->onChange(toggleDraw);
 
-	botaoHelp->connect("pressed", Help);
-	botaoSave->connect("pressed", Save2File);
-	botaoCenter->connect("pressed", centraliza);
-	reset->connect("pressed", reseta);
-	tikz->connect("pressed", tikzVai);
+	botaoHelp->onPress(Help);
+	botaoSave->onPress(Save2File);
+	botaoCenter->onPress(centraliza);
+	reset->onPress(reseta);
+	tikz->onPress(tikzVai);
 }
 
 void drawStuff() {
@@ -346,8 +342,7 @@ Graph display(int X, int Y, Graph G) {
 	// janela.setKeyRepeatEnabled(false);
 	// gui = tgui::Gui(*janela);
 	gui.setTarget(janela);
-	tgui::Theme tema{"assets/Botoes.txt"};
-	tgui::Theme::setDefault(&tema);
+	tgui::Theme::setDefault("assets/Botoes.txt");
 
 	// GraphCanvas
 	GC = GraphCanvas(janela, fonte, X * 4 / 5, Y * 6 / 7);
@@ -364,7 +359,7 @@ Graph display(int X, int Y, Graph G) {
 	}
 
 	// Botoes
-	vector<tgui::Button::Ptr> botoes;
+	vector<pair<tgui::Button::Ptr, string>> botoes;
 	buttons::init(botoes, GC);
 	buttons::update(gui, botoes, GC);
 
@@ -406,11 +401,11 @@ Graph display(int X, int Y, Graph G) {
 					// label
 					if (GC.editLabel > -1)
 						GC.GD.G.label[GC.editLabel] =
-							edit->getText().toAnsiString();
+							edit->getText().toStdString();
 
 					// weight
 					if (GC.editWeight > -1) {
-						string s = edit->getText().toAnsiString();
+						string s = edit->getText().toStdString();
 
 						bool valid = 1;
 						if (!s.size())
@@ -431,7 +426,7 @@ Graph display(int X, int Y, Graph G) {
 									if (position++ == GC.editWeight)
 										G.addEdge(i, j.first,
 												  stoi(edit->getText()
-														   .toAnsiString()));
+														   .toStdString()));
 									else
 										G.addEdge(i, j.first, j.second);
 								}

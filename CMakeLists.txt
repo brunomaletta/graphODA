@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.6)
-set(CMAKE_CXX_STANDARD 14)
+cmake_minimum_required(VERSION 2.9)
+set(CMAKE_CXX_STANDARD 17)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Escolha o tipo de build (Debug ou Release)" FORCE)
@@ -25,7 +25,8 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake_debug_packages" ${CMAKE_MODULE_PATH})
 endif()
 find_package(SFML 2.4 COMPONENTS graphics window system REQUIRED)
-find_package(TGUI 0.8 REQUIRED)
+#set(TGUI_STATIC_LIBRARIES TRUE)
+find_package(TGUI 1 REQUIRED)
 
 set(SRC_FILES
         "${PROJECT_SOURCE_DIR}/src/views/Buttons.cpp"
@@ -51,7 +52,7 @@ add_subdirectory (tests)
 ## Configuração para compilação do executável final
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_executable(graphODA $<TARGET_OBJECTS:common> "${PROJECT_SOURCE_DIR}/src/main.cpp")
-target_link_libraries(graphODA tgui sfml-graphics sfml-window sfml-system)
+target_link_libraries(graphODA TGUI::TGUI sfml-graphics sfml-window sfml-system)
 
 add_custom_target(run
 	DEPENDS graphODA

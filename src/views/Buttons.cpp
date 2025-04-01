@@ -66,85 +66,88 @@ void clearGraph(GraphCanvas *GC) {
 	GC->GD.colorAresta = vector<int>(GC->GD.G.getM(), 100);
 }
 
+void add_buttons(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v,
+	const vector<int> &idxs) {
+	for (int idx : idxs) if (!gui.get(v[idx].second))
+		gui.add(v[idx].first, v[idx].second);
+}
+
 } // namespace functions
 
 namespace buttons {
-void general(tgui::Gui &gui, vector<tgui::Button::Ptr> &v) {
-	vector<int> op = {1, 2, 3, 4, 6, 7};
-	for (int i : op) gui.add(v[i]);
+void general(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v) {
+	functions::add_buttons(gui, v, {1, 2, 3, 4, 6, 7});
 }
 
-void clear(tgui::Gui &gui, vector<tgui::Button::Ptr> &v) {
-	for (auto i : v) gui.remove(i);
+void clear(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v) {
+	for (auto& [button, name] : v) gui.remove(button);
 }
 
-void bipartite(tgui::Gui &gui, vector<tgui::Button::Ptr> &v) {}
+void bipartite(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v) {}
 
-void chordal(tgui::Gui &gui, vector<tgui::Button::Ptr> &v) {
-	vector<int> op = {0, 6};
-	for (int i : op) gui.add(v[i]);
+void chordal(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v) {
+	functions::add_buttons(gui, v, {0, 6});
 }
 
-void dag(tgui::Gui &gui, vector<tgui::Button::Ptr> &v) {}
+void dag(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v) {}
 
-void tree(tgui::Gui &gui, vector<tgui::Button::Ptr> &v) {
-	vector<int> op = {5};
-	for (int i : op) gui.add(v[i]);
+void tree(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v) {
+	functions::add_buttons(gui, v, {5});
 }
 
-void init(vector<tgui::Button::Ptr> &v, GraphCanvas &GC) {
+void init(vector<pair<tgui::Button::Ptr, string>> &v, GraphCanvas &GC) {
 	auto color = tgui::Button::create("Colore");
-	v.push_back(color);
+	v.emplace_back(color, "Colore");
 	color->setSize(75.f, 20.f);
 	color->setPosition(810.f, 260.f);
-	color->connect("pressed", functions::coloreChordal, &GC);
+	color->onPress(functions::coloreChordal, &GC);
 
 	auto mst = tgui::Button::create("mst");
-	v.push_back(mst);
+	v.emplace_back(mst, "mst");
 	mst->setSize(75.f, 20.f);
 	mst->setPosition(810.f, 70.f);
-	mst->connect("pressed", functions::mst, &GC);
+	mst->onPress(functions::mst, &GC);
 
 	auto guloso = tgui::Button::create("Colore (guloso)");
-	v.push_back(guloso);
+	v.emplace_back(guloso, "Colore (guloso)");
 	guloso->setSize(115.f, 20.f);
 	guloso->setPosition(810.f, 210.f);
-	guloso->connect("pressed", functions::greedyColoring, &GC);
+	guloso->onPress(functions::greedyColoring, &GC);
 
 	auto artPoints = tgui::Button::create("Pontos de art");
-	v.push_back(artPoints);
+	v.emplace_back(artPoints, "Pontos de art");
 	artPoints->setSize(115.f, 20.f);
 	artPoints->setPosition(810.f, 110.f);
-	artPoints->connect("pressed", functions::artPoints, &GC);
+	artPoints->onPress(functions::artPoints, &GC);
 
 	auto pontes = tgui::Button::create("Pontes");
-	v.push_back(pontes);
+	v.emplace_back(pontes, "Pontes");
 	pontes->setSize(75.f, 20.f);
 	pontes->setPosition(810.f, 160.f);
-	pontes->connect("pressed", functions::pontes, &GC);
+	pontes->onPress(functions::pontes, &GC);
 
 	auto center = tgui::Button::create("Centro");
-	v.push_back(center);
+	v.emplace_back(center, "Centro");
 	center->setSize(75.f, 20.f);
 	center->setPosition(810.f, 310.f);
-	center->connect("pressed", functions::center, &GC);
+	center->onPress(functions::center, &GC);
 
 	auto clear = tgui::Button::create("Limpa");
-	v.push_back(clear);
+	v.emplace_back(clear, "Limpa");
 	clear->setSize(75.f, 20.f);
 	clear->setPosition(810.f, 360.f);
-	clear->connect("pressed", functions::clearGraph, &GC);
+	clear->onPress(functions::clearGraph, &GC);
 
-	auto matching = tgui::Button::create("matching");
-	v.push_back(matching);
+	auto matching = tgui::Button::create("Matching");
+	v.emplace_back(matching, "Matching");
 	matching->setSize(75.f, 20.f);
 	matching->setPosition(810.f, 30.f);
-	matching->connect("pressed", functions::matching, &GC);
+	matching->onPress(functions::matching, &GC);
 }
 
-void update(tgui::Gui &gui, vector<tgui::Button::Ptr> &botoes,
+void update(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &botoes,
 			GraphCanvas &GC) {
-	for (int i = 0; i < 10; i++) clear(gui, botoes);
+	clear(gui, botoes);
 	if (GC.GD.G.getN()) {
 		general(gui, botoes);
 		if (GC.GD.G.isBipartite()) bipartite(gui, botoes);

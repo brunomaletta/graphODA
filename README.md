@@ -21,9 +21,9 @@ Para exemplos, assista ao [vídeo](https://www.youtube.com/watch?v=MY5hHPIj3cg).
 ### Como instalar as dependências?
 Um script simples para Ubuntu 18.04+
 ```bash
-sudo add-apt-repository ppa:texus/tgui-0.8
+sudo add-apt-repository ppa:texus/tgui
 sudo apt-get update
-sudo apt-get install libsfml-dev libtgui-dev
+sudo apt-get install libsfml-dev libtgui-1.0-dev
 ```
 Ou utilizando o Dockerfile provido no repositório (preferencial).
 
