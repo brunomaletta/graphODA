@@ -102,8 +102,8 @@ void init(vector<pair<tgui::Button::Ptr, string>> &v, GraphCanvas &GC) {
 	color->setPosition(810.f, 260.f);
 	color->onPress(functions::coloreChordal, &GC);
 
-	auto mst = tgui::Button::create("mst");
-	v.emplace_back(mst, "mst");
+	auto mst = tgui::Button::create("MST");
+	v.emplace_back(mst, "MST");
 	mst->setSize(75.f, 20.f);
 	mst->setPosition(810.f, 70.f);
 	mst->onPress(functions::mst, &GC);

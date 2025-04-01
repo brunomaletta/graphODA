@@ -199,7 +199,7 @@ void loadWidgets() {
 	checkLabels->setChecked(true);
 
 	// Check box de draw mode
-	auto checkDraw = tgui::CheckBox::create("Editar");
+	auto checkDraw = tgui::CheckBox::create("Editar (ctrl)");
 	checkDraw->setSize(20.f, 20.f);
 	checkDraw->setPosition(700.f, 615.f);
 	gui.add(checkDraw);
