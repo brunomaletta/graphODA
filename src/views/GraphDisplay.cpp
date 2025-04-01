@@ -529,13 +529,14 @@ void GraphDisplay::getTikz(string arq, double scale) {
 	outFile << "\t\\centering\n";
 	outFile << "\t\\scalebox{" << scale << "}{\n";
 	outFile << "\t\t\\begin{tikzpicture}\n";
-	outFile << "\t\t\t\\tikzstyle{every state}=[fill opacity=0.5,text opacity=1,semithick,minimum size=10pt]\n";
+	outFile << "\t\t\t\\tikzstyle{every state}=[fill opacity=0.5,text "
+			   "opacity=1,semithick,minimum size=10pt]\n";
 	outFile << "\n";
 
 	for (int i = 0; i < G.getN(); i++)
 		outFile << "\t\t\t\\node[state] (" << G.label[i] << ") at ("
-				<< 15 * pos[i].x / X << ", " << 15 * (Y - pos[i].y) / X
-				<< ") {" << G.label[i] << "};\n";
+				<< 15 * pos[i].x / X << ", " << 15 * (Y - pos[i].y) / X << ") {"
+				<< G.label[i] << "};\n";
 
 	outFile << "\n";
 	outFile << "\t\t\t\\draw\n";
@@ -551,8 +552,10 @@ void GraphDisplay::getTikz(string arq, double scale) {
 		}
 
 		if (!temDir) {
-			if (edgeOps.size()) edgeOps = "-," + edgeOps;
-			else edgeOps = "-";
+			if (edgeOps.size())
+				edgeOps = "-," + edgeOps;
+			else
+				edgeOps = "-";
 		}
 
 		string label1 = G.label[edg[i].first];

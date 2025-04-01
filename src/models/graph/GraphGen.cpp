@@ -560,7 +560,7 @@ vector<int> GraphGen::blossom() {
 }
 
 int GraphGen::cmpDouble(double x, double y, double EPS) {
-	double dist = abs(x-y);
+	double dist = abs(x - y);
 	if (dist < EPS) return 0;
 	return (x < y) ? -1 : 1;
 }
@@ -588,14 +588,14 @@ vector<int> GraphGen::inertia(vector<vector<double>> a) {
 			a[k][i] /= alpha;
 		}
 
-		for (int i = k+1; i < n; i++) {
-			double beta = a[i][k]/a[k][k];
+		for (int i = k + 1; i < n; i++) {
+			double beta = a[i][k] / a[k][k];
 			for (int j = 0; j < n; j++) {
-				a[i][j] -= beta*a[k][j];
+				a[i][j] -= beta * a[k][j];
 			}
-			double gamma = a[k][i]/a[k][k];
+			double gamma = a[k][i] / a[k][k];
 			for (int j = 0; j < n; j++) {
-				a[j][i] -= gamma*a[j][k];
+				a[j][i] -= gamma * a[j][k];
 			}
 		}
 	}
@@ -607,14 +607,13 @@ vector<int> GraphGen::inertia(vector<vector<double>> a) {
 }
 
 void GraphGen::eigenvalueRec(const vector<vector<int>>& t, vector<double>& eig,
-			double l, double r, int sz_l, int sz_r) {
+							 double l, double r, int sz_l, int sz_r) {
 	if (sz_l + sz_r == t.size()) return;
 
-	double m = (l+r)/2;
+	double m = (l + r) / 2;
 
 	if (!cmpDouble(l, r, 1e-6)) {
-		for (int k = 0; k < t.size()-sz_l-sz_r; k++)
-			eig.push_back(m);
+		for (int k = 0; k < t.size() - sz_l - sz_r; k++) eig.push_back(m);
 		return;
 	}
 

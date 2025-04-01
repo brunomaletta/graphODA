@@ -67,9 +67,9 @@ void clearGraph(GraphCanvas *GC) {
 }
 
 void add_buttons(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v,
-	const vector<int> &idxs) {
-	for (int idx : idxs) if (!gui.get(v[idx].second))
-		gui.add(v[idx].first, v[idx].second);
+				 const vector<int> &idxs) {
+	for (int idx : idxs)
+		if (!gui.get(v[idx].second)) gui.add(v[idx].first, v[idx].second);
 }
 
 } // namespace functions
@@ -80,7 +80,7 @@ void general(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v) {
 }
 
 void clear(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v) {
-	for (auto& [button, name] : v) gui.remove(button);
+	for (auto &[button, name] : v) gui.remove(button);
 }
 
 void bipartite(tgui::Gui &gui, vector<pair<tgui::Button::Ptr, string>> &v) {}

@@ -9,9 +9,9 @@
 #include <SFML/Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 
+#include <chrono>
 #include <string>
 #include <thread>
-#include <chrono>
 using namespace std;
 
 namespace interface {

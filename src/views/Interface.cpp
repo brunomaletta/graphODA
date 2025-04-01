@@ -10,7 +10,7 @@ bool mudou;
 bool para;
 tgui::EditBox::Ptr edit;
 bool editing;
-bool Espectro;
+bool espectro;
 tgui::CheckBox::Ptr editGraphButton;
 
 void lerGrafoArquivoAux(tgui::EditBox::Ptr arq) {
@@ -85,7 +85,7 @@ void tikzVai2(tgui::ChildWindow::Ptr jan, tgui::EditBox::Ptr arq) {
 	gui.draw();
 	janela.display();
 
-	//static string arquivo = arq->getText().toStdString();
+	// static string arquivo = arq->getText().toStdString();
 	static string arquivo;
 	arquivo = arq->getText().toStdString();
 
@@ -147,7 +147,7 @@ void Help() {
 
 void mudaDir() { (GC.GD.temDir) ^= 1; }
 
-void mudaEspectro() { Espectro ^= 1; }
+void mudaEspectro() { espectro ^= 1; }
 
 void mudaLabels() { GC.drawLabels ^= 1; }
 
@@ -388,8 +388,10 @@ Graph display(int X, int Y, Graph G) {
 			if (evento.type == sf::Event::KeyPressed) {
 				// ctrl -> toggle draw mode
 				if (evento.key.code == sf::Keyboard::LControl and !editing) {
-					if (GC.GD.draw) editGraphButton->setChecked(false);
-					else editGraphButton->setChecked(true);
+					if (GC.GD.draw)
+						editGraphButton->setChecked(false);
+					else
+						editGraphButton->setChecked(true);
 					break;
 				}
 
@@ -428,9 +430,10 @@ Graph display(int X, int Y, Graph G) {
 							for (int i = 0; i < GC.GD.G.getN(); i++)
 								for (auto &j : adj[i]) {
 									if (position++ == GC.editWeight)
-										G.addEdge(i, j.first,
-												  stoi(edit->getText()
-														   .toStdString()));
+										G.addEdge(
+											i, j.first,
+											stoi(
+												edit->getText().toStdString()));
 									else
 										G.addEdge(i, j.first, j.second);
 								}
@@ -467,9 +470,9 @@ Graph display(int X, int Y, Graph G) {
 
 		janela.draw(tipo);
 
-		if (Espectro) {
+		if (espectro) {
 			// Desenha matriz
-			auto& adj = GC.GD.simMatrix;
+			auto &adj = GC.GD.simMatrix;
 			for (int i = 0; i < adj.size(); i++) {
 				string linha;
 				for (int j = 0; j < adj.size(); j++) {
@@ -480,7 +483,7 @@ Graph display(int X, int Y, Graph G) {
 				sf_linha.setFont(fonte);
 				sf_linha.setCharacterSize(18);
 				sf_linha.setFillColor(sf::Color(134, 194, 50));
-				sf_linha.setPosition(5, 20*i);
+				sf_linha.setPosition(5, 20 * i);
 				sf_linha.setString(linha);
 				janela.draw(sf_linha);
 			}
@@ -491,7 +494,7 @@ Graph display(int X, int Y, Graph G) {
 				eigenvalue.setFont(fonte);
 				eigenvalue.setCharacterSize(18);
 				eigenvalue.setFillColor(sf::Color(134, 194, 50));
-				eigenvalue.setPosition(20*GC.GD.G.getN() + 40, 20*i);
+				eigenvalue.setPosition(20 * GC.GD.G.getN() + 40, 20 * i);
 				eigenvalue.setString(to_string(GC.GD.eigenvalues[i]));
 				janela.draw(eigenvalue);
 			}

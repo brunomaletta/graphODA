@@ -2,6 +2,7 @@
 #define GRAPHGENH
 
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <numeric>
 #include <queue>
@@ -10,7 +11,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <cmath>
 
 using namespace std;
 
@@ -285,11 +285,12 @@ class GraphGen {
 	int getAugmentingPath(vector<int> &, vector<int> &, vector<int> &,
 						  vector<int> &, queue<int> &, int);
 
-	int cmpDouble(double, double, double=1e-6);
+	int cmpDouble(double, double, double = 1e-6);
 
 	vector<int> inertia(vector<vector<double>>);
 
-	void eigenvalueRec(const vector<vector<int>>&, vector<double>&, double, double, int, int);
+	void eigenvalueRec(const vector<vector<int>> &, vector<double> &, double,
+					   double, int, int);
 };
 
 ///

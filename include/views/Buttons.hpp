@@ -4,11 +4,11 @@
 #include "GraphCanvas.hpp"
 
 #include <SFML/Graphics.hpp>
-#include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
+#include <TGUI/TGUI.hpp>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 using namespace std;
 
