@@ -461,10 +461,13 @@ Graph display(int X, int Y, Graph G) {
 		tipo.setPosition(810, 605);
 
 		string msg = "";
-		if (GC.GD.G.isBipartite()) msg += "Bipartido\n";
-		if (GC.GD.G.isChordal()) msg += "Cordal\n";
-		if (GC.GD.G.isDag()) msg += "DAG\n";
-		if (GC.GD.G.isTree()) msg += "Arvore\n";
+		if (!GC.GD.temDir) {
+			if (GC.GD.G.isBipartite()) msg += "Bipartido\n";
+			if (GC.GD.G.isChordal()) msg += "Cordal\n";
+			if (GC.GD.G.isTree()) msg += "Arvore\n";
+		} else {
+			if (GC.GD.G.isDag()) msg += "DAG\n";
+		}
 		if (!GC.GD.G.getN()) msg = "";
 		tipo.setString(msg);
 
